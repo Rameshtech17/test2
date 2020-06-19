@@ -2,67 +2,13 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework import status, generics, permissions
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view, permission_classes
-
 from .models import School, Class, Teacher, StudentsList, Subject
 from .serializers import SchoolSerializer, ClassSerializer, TeacherSerializer, StudentListSerializer, SubjectSerializer, TeachersSerializer, showProfileSerializer
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-
-
-
-# @api_view(['GET', 'POST'])
-# @permission_classes((IsAuthenticated,))
-# def SchoolAPIView(request):
-#     if request.method == 'GET':
-#         school = School.objects.all()
-#         serializer = SchoolSerializer(school, many=True)
-#         return Response(serializer.data)
-#
-#     elif request.method == 'POST':
-#         serializer = SchoolSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_2001_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# @api_view(['GET', 'PUT', 'DELETE'])
-# @permission_classes((IsAuthenticated,))
-# def School_details(request, id):
-#     try:
-#         article = School.objects.get(id=id)
-#
-#     except School.DoesNotExist:
-#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-#
-#     user = School.SchoolName
-#     if article.SchoolName != 'BCA':
-#         return Response({'Response': 'Access Not given '})
-#
-#     if request.method == 'GET':
-#         serializer = SchoolSerializer(article)
-#         return Response(serializer.data)
-#
-#     elif request.method == 'PUT':
-#         serializer = SchoolSerializer(article, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#     elif request.method == 'DELETE':
-#         article.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
 
 class SchoolAPIView(APIView):
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsAuthenticated]
+
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request):
@@ -94,13 +40,9 @@ class SearchAPIView(generics.ListAPIView):
     serializer_class = TeacherSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filter_fields = ('Class', 'TeacherName')
-    # search_fields = ('id'.'Class', 'TeacherName')
 
 
 class ClassAPIView(APIView):
-
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsAuthenticated]
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -121,9 +63,6 @@ class ClassAPIView(APIView):
 
 class TeacherAPIView(APIView):
 
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsAuthenticated]
-
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request):
@@ -142,8 +81,6 @@ class TeacherAPIView(APIView):
 
 class StudentListAPIView(APIView):
 
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsAuthenticated]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request):
@@ -161,9 +98,6 @@ class StudentListAPIView(APIView):
 
 
 class SubjectAPIView(APIView):
-
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsAuthenticated]
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -299,36 +233,6 @@ class StudentListUpdateAPIView(APIView):
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-# @api_view(['GET', 'PUT', 'DELETE'])
-# @permission_classes((IsAuthenticated,))
-# def Subject_details(request, id):
-#     try:
-#         article = Subject.objects.get(id=id)
-#
-#     except School.DoesNotExist:
-#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-#
-#     user = School.SchoolName
-#     if article.SchoolName != 'BCA':
-#         return Response({'Response': 'Access Not given '})
-#
-#     if request.method == 'GET':
-#         serializer = SubjectSerializer(article)
-#         return Response(serializer.data)
-#
-#     elif request.method == 'PUT':
-#         serializer = SubjectSerializer(article, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#     elif request.method == 'DELETE':
-#         article.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 class SubjectUpdateAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -362,53 +266,6 @@ class SubjectUpdateAPIView(APIView):
 class ShowProfile(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsAuthenticated]
-
     def get(self, request):
         serializer = showProfileSerializer(request.user)
         return Response(serializer.data)
-
-
-# @api_view(['GET', 'POST'])
-# @permission_classes((IsAuthenticated,))
-# def article_list(request):
-#     if request.method == 'GET':
-#         articles = Article.objects.all()
-#         serializer = ArticleSerializer(articles, many=True)
-#         return Response(serializer.data)
-#     elif request.method == 'POST':
-#         serializer = ArticleSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_2001_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# @api_view(['GET', 'PUT', 'DELETE'])
-# @permission_classes((IsAuthenticated,))
-# def article_details(request, pk):
-#     try:
-#         article = Article.objects.get(pk=pk)
-#
-#     except Article.DoesNotExist:
-#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-#
-#     user = Article.author
-#     if article.author != "user1":
-#         return Response({'Response': 'Access Not given '})
-#     if request.method == 'GET':
-#         serializer = ArticleSerializer(article)
-#         return Response(serializer.data)
-#
-#     elif request.method == 'PUT':
-#         serializer = ArticleSerializer(article, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#     elif request.method == 'DELETE':
-#         article.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-#
